@@ -1,6 +1,6 @@
 # how to use this test file
 # step 1: cd to mysql server bin and run mysql
-# step 2: open another window, cd to this foler and run python test.py. 
+# step 2: open another window, cd to this folder and run python test.py. 
 # Note! this can only be executed once because otherwise user key email would be duplicate
 # step 3: check if the table has been created. 
 # Attention! the table name is users not user!
