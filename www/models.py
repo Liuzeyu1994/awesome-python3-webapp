@@ -23,10 +23,10 @@ class User(Model):
 	# time of creation, by default is the current time
 	# date and time is stored as float, not datetime, to avoid time zone transformation
 	# to display date and time, just do a transform from float to str
-	create_at = FloatField(default=time.time)	
+	created_at = FloatField(default=time.time)	
 
 # a table for blog
-class blog(Model):
+class Blog(Model):
 	__table__ = 'blogs'
 
 	id = StringField(primary_key=True, default=next_id, ddl='varchar(50)')
@@ -36,10 +36,10 @@ class blog(Model):
 	name = StringField(ddl='varchar(50)')		# name of the article
 	summary = StringField(ddl='varchar(200)')	# summary of the article
 	content = TextField()						# content of the article
-	create_at = FloatField(default=time.time)
+	created_at = FloatField(default=time.time)
 
 # a table for comments
-class comment(Model):
+class Comment(Model):
 	__table__ = 'comments'
 
 	id = StringField(primary_key=True, default=next_id, ddl='varchar(50)')
@@ -48,4 +48,4 @@ class comment(Model):
 	user_name = StringField(ddl='varchar(50)')	# commenter's name
 	user_image = StringField(ddl='varchar(500)')	# the image that commenter uploads
 	content = TextField()
-	create_at = FloatField(default=time.time)
+	created_at = FloatField(default=time.time)

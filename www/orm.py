@@ -16,7 +16,8 @@ async def create_pool(loop,**kw):
 	global __pool
 	__pool = await aiomysql.create_pool(
 		# the following parameters are obtaianed from keyword parameter kw
-		host = kw.get('host','local host'), #database server, by defaullt 'local host'
+		# attention! To be consistent with schema.sql, the host is "localhost" not "local host"
+		host = kw.get('host','localhost'), #database server, by defaullt 'localhost'
         port = kw.get('port',3306),	# port of sql, by default 3306
         user = kw['user'],	# log in user name, in kw
         password = kw['password'],  # log in password
@@ -108,7 +109,7 @@ class StringField(Field):
 class BooleanField(Field):
 
 	def __init__(self, name=None,default=False):
-		super().__init__(name,ddl,primary_key,default)
+		super().__init__(name,'boolean',False,default)
 
 class IntegerField(Field):
 
@@ -140,7 +141,7 @@ class ModelMetaclass(type):
 		fields = []
 		primaryKey = None
 		for k,v in attrs.items():
-			if instance(v,Field):
+			if isinstance(v,Field):
 				logging.info(' found mapping %s ==> %s' % (k,v))
 				mappings[k] = v
 				# check if the mapping found is primary key
@@ -217,7 +218,7 @@ class Model(dict, metaclass=ModelMetaclass):
 		rs = await select('%s where `%s`=?' % (cls.__select__,cls.__primary_key__),[pk],1)
 		if len(rs) == 0:
 			return None
-		return cls[**rs[0]]
+		return cls(**rs[0])
 
 	# findAll(), find object by where clause
 	@classmethod
@@ -277,7 +278,7 @@ class Model(dict, metaclass=ModelMetaclass):
 		args = list(map(self.getValue, self.__fields__))
 		args.append(self.getValue(self.__primary_key__))
 		rows = await execute(self.__update__,args)
-		if rows != 1;
+		if rows != 1:
 			logging.warn('failed to update by primary key: affected rows: %s' % rows)
 
 	async def remove(self):
